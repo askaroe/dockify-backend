@@ -23,10 +23,16 @@ func NewRouter(handler *handlers.Handler) *gin.Engine {
 	r.GET("/health", handlers.HealthCheck)
 	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	//apiMedia := r.Group("/api/v1")
+	//api := r.Group("/api/v1")
 	//{
 	//	apiMedia.POST("/upload-photo", handler.Profile.InsertPicture)
 	//}
+
+	auth := r.Group("/auth")
+	{
+		auth.GET("/huawei/login", handler.LoginHuawei)
+		auth.GET("/huawei/callback", handler.HuaweiCallback)
+	}
 
 	return r
 }

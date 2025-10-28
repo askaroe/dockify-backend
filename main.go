@@ -29,7 +29,7 @@ func main() {
 
 	s := services.NewService(repo)
 
-	handler := handlers.NewHandler(logger, s, cfg)
+	handler := handlers.NewHandler(logger, s)
 
 	r := router.NewRouter(handler)
 
