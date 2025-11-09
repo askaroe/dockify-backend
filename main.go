@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/askaroe/dockify-backend/config"
+	_ "github.com/askaroe/dockify-backend/docs"
 	"github.com/askaroe/dockify-backend/internal/handlers"
 	"github.com/askaroe/dockify-backend/internal/repository"
 	"github.com/askaroe/dockify-backend/internal/router"
@@ -11,6 +12,10 @@ import (
 	"github.com/askaroe/dockify-backend/pkg/utils"
 )
 
+// @title Dockify Backend API
+// @version 1.0
+// @description API for Dockify backend.
+// @schemes http https
 func main() {
 	logger := utils.NewLogger("dockify-backend")
 	cfg, err := config.GetConfig()

@@ -4,6 +4,8 @@ import (
 	"github.com/askaroe/dockify-backend/internal/handlers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func NewRouter(handler *handlers.Handler) *gin.Engine {
@@ -18,21 +20,17 @@ func NewRouter(handler *handlers.Handler) *gin.Engine {
 		AllowCredentials: true,
 		MaxAge:           300, // Maximum cache age in seconds
 	}))
-	r.Use(SetJSONContentType())
+
+	api := r.Group("/api/v1")
+	{
+		api.POST("/register", handler.Register)
+		api.POST("/login", handler.Login)
+		api.POST("/metrics", handler.Health.CreateHealthMetrics)
+		api.GET("/metrics", handler.Health.GetHealthMetrics)
+	}
 
 	r.GET("/health", handlers.HealthCheck)
-	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	//api := r.Group("/api/v1")
-	//{
-	//	apiMedia.POST("/upload-photo", handler.Profile.InsertPicture)
-	//}
-
-	auth := r.Group("/auth")
-	{
-		auth.GET("/huawei/login", handler.LoginHuawei)
-		auth.GET("/huawei/callback", handler.HuaweiCallback)
-	}
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
 }

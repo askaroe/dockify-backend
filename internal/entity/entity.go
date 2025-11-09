@@ -1,16 +1,28 @@
 package entity
 
 const (
-	ClientID     = "115622401"
-	ClientSecret = "c1accc4f9244180f19808e3a89e203d061c27d6c187c225ed97359db587c765e"
-	RedirectURI  = "https://aokhan.com/huawei/callback"
-	State        = "dockify-state-123"
+	RequestParamUserID = "user_id"
 )
 
-type TokenResp struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-	ExpiresIn    int64  `json:"expires_in"`
-	TokenType    string `json:"token_type"`
-	Scope        string `json:"scope"`
+type UserRegisterRequest struct {
+	Username  string `json:"username"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+}
+
+type UserLoginRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type HealthMetricsRequest struct {
+	UserId  int            `json:"user_id"`
+	Metrics []HealthMetric `json:"metrics"`
+}
+
+type HealthMetric struct {
+	MetricType  string `json:"metric_type"`
+	MetricValue string `json:"metric_value"`
 }

@@ -1,0 +1,206 @@
+definitions:
+  entity.HealthMetric:
+    properties:
+      metric_type:
+        type: string
+      metric_value:
+        type: string
+    type: object
+  entity.HealthMetricsRequest:
+    properties:
+      metrics:
+        items:
+          $ref: '#/definitions/entity.HealthMetric'
+        type: array
+      user_id:
+        type: integer
+    type: object
+  entity.UserLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  entity.UserRegisterRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API for Dockify backend.
+  title: Dockify Backend API
+  version: "1.0"
+paths:
+  /api/v1/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return user information
+      parameters:
+      - description: User login payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: authenticated user
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: invalid request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: invalid email or password
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User login
+      tags:
+      - User
+  /api/v1/metrics:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve health metrics for a given user by query parameter user_id
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: list of health metrics
+          schema:
+            items:
+              type: object
+            type: array
+        "400":
+          description: invalid user_id or missing parameter
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: failed to get health metrics
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get health metrics
+      tags:
+      - Metrics
+    post:
+      consumes:
+      - application/json
+      description: Create health metrics for a user
+      parameters:
+      - description: Health metrics payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.HealthMetricsRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: status message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: invalid request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: failed to create health metrics
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create health metrics
+      tags:
+      - Metrics
+  /api/v1/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: User registration payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UserRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: created user id
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: invalid request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: failed to register user
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register a new user
+      tags:
+      - User
+  /health:
+    get:
+      description: Returns the live status of the service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: health
+          schema:
+            type: string
+      summary: Health Check (Live)
+      tags:
+      - Health
+schemes:
+- http
+- https
+swagger: "2.0"
