@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/shopspring/decimal"
+)
 
 type User struct {
 	ID           int        `json:"id"`
@@ -18,4 +22,12 @@ type HealthMetrics struct {
 	MetricType  string     `json:"metric_type"`
 	MetricValue string     `json:"metric_value"`
 	RecordedAt  *time.Time `json:"recorded_at"`
+}
+
+type Location struct {
+	ID         int             `json:"id"`
+	UserId     int             `json:"user_id"`
+	Latitude   decimal.Decimal `json:"latitude"`
+	Longitude  decimal.Decimal `json:"longitude"`
+	RecordedAt *time.Time      `json:"recorded_at"`
 }

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/askaroe/dockify-backend/internal/handlers/health"
+	"github.com/askaroe/dockify-backend/internal/handlers/location"
 	"github.com/askaroe/dockify-backend/internal/handlers/user"
 	"github.com/askaroe/dockify-backend/internal/services"
 	"github.com/askaroe/dockify-backend/pkg/utils"
@@ -13,12 +14,14 @@ import (
 type Handler struct {
 	user.User
 	health.Health
+	location.Location
 }
 
 func NewHandler(logger *utils.Logger, s *services.Service) *Handler {
 	return &Handler{
-		User:   user.NewUserHandler(s, logger),
-		Health: health.NewHealthHandler(s, logger),
+		User:     user.NewUserHandler(s, logger),
+		Health:   health.NewHealthHandler(s, logger),
+		Location: location.NewLocationHandler(s, logger),
 	}
 }
 
@@ -31,4 +34,15 @@ func NewHandler(logger *utils.Logger, s *services.Service) *Handler {
 // @Router /health [get]
 func HealthCheck(c *gin.Context) {
 	c.JSON(http.StatusOK, "health")
+}
+
+// GetRecommendation godoc
+// @Summary Get Recommendation
+// @Description Returns a recommendation string
+// @Tags Recommendation
+// @Produce json
+// @Success 200 {string} string "recommendation"
+// @Router /api/v1/recommendation [get]
+func GetRecommendation(c *gin.Context) {
+	c.JSON(http.StatusOK, "recommendation")
 }

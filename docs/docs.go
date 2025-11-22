@@ -16,6 +16,58 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/location/nearest": {
+            "post": {
+                "description": "Retrieves users nearest to given coordinates within a radius.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "location"
+                ],
+                "summary": "Get nearest users",
+                "parameters": [
+                    {
+                        "description": "Nearest users request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.NearestUsersRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.NearestUsersResponse"
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "no content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/login": {
             "post": {
                 "description": "Authenticate user and return user information",
@@ -51,28 +103,19 @@ const docTemplate = `{
                     "400": {
                         "description": "invalid request",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/entity.ErrorMessage"
                         }
                     },
                     "401": {
                         "description": "invalid email or password",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/entity.ErrorMessage"
                         }
                     },
                     "500": {
                         "description": "internal server error",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/entity.ErrorMessage"
                         }
                     }
                 }
@@ -113,19 +156,13 @@ const docTemplate = `{
                     "400": {
                         "description": "invalid user_id or missing parameter",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/entity.ErrorMessage"
                         }
                     },
                     "500": {
                         "description": "failed to get health metrics",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/entity.ErrorMessage"
                         }
                     }
                 }
@@ -166,19 +203,33 @@ const docTemplate = `{
                     "400": {
                         "description": "invalid request",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/entity.ErrorMessage"
                         }
                     },
                     "500": {
                         "description": "failed to create health metrics",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/entity.ErrorMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/recommendation": {
+            "get": {
+                "description": "Returns a recommendation string",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Recommendation"
+                ],
+                "summary": "Get Recommendation",
+                "responses": {
+                    "200": {
+                        "description": "recommendation",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -212,26 +263,19 @@ const docTemplate = `{
                     "201": {
                         "description": "created user id",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/entity.CreatedUserResponse"
                         }
                     },
                     "400": {
                         "description": "invalid request",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/entity.ErrorMessage"
                         }
                     },
                     "500": {
                         "description": "failed to register user",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/entity.ErrorMessage"
                         }
                     }
                 }
@@ -259,6 +303,22 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entity.CreatedUserResponse": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.ErrorMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.HealthMetric": {
             "type": "object",
             "properties": {
@@ -273,11 +333,59 @@ const docTemplate = `{
         "entity.HealthMetricsRequest": {
             "type": "object",
             "properties": {
+                "location": {
+                    "$ref": "#/definitions/entity.Location"
+                },
                 "metrics": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/entity.HealthMetric"
                     }
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.Location": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "example": 55.755825
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 37.617396
+                }
+            }
+        },
+        "entity.NearestUsersRequest": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "example": 55.755825
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 37.617396
+                },
+                "radius": {
+                    "description": "in meters",
+                    "type": "integer",
+                    "example": 5000
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.NearestUsersResponse": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "$ref": "#/definitions/entity.Location"
                 },
                 "user_id": {
                     "type": "integer"

@@ -27,6 +27,12 @@ func NewRouter(handler *handlers.Handler) *gin.Engine {
 		api.POST("/login", handler.Login)
 		api.POST("/metrics", handler.Health.CreateHealthMetrics)
 		api.GET("/metrics", handler.Health.GetHealthMetrics)
+		api.GET("/recommendation", handlers.GetRecommendation)
+
+		location := api.Group("/location")
+		{
+			location.POST("/nearest", handler.Location.GetNearestUsers)
+		}
 	}
 
 	r.GET("/health", handlers.HealthCheck)

@@ -1,4 +1,14 @@
 definitions:
+  entity.CreatedUserResponse:
+    properties:
+      user_id:
+        type: integer
+    type: object
+  entity.ErrorMessage:
+    properties:
+      message:
+        type: string
+    type: object
   entity.HealthMetric:
     properties:
       metric_type:
@@ -8,10 +18,43 @@ definitions:
     type: object
   entity.HealthMetricsRequest:
     properties:
+      location:
+        $ref: '#/definitions/entity.Location'
       metrics:
         items:
           $ref: '#/definitions/entity.HealthMetric'
         type: array
+      user_id:
+        type: integer
+    type: object
+  entity.Location:
+    properties:
+      latitude:
+        example: 55.755825
+        type: number
+      longitude:
+        example: 37.617396
+        type: number
+    type: object
+  entity.NearestUsersRequest:
+    properties:
+      latitude:
+        example: 55.755825
+        type: number
+      longitude:
+        example: 37.617396
+        type: number
+      radius:
+        description: in meters
+        example: 5000
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  entity.NearestUsersResponse:
+    properties:
+      location:
+        $ref: '#/definitions/entity.Location'
       user_id:
         type: integer
     type: object
@@ -41,6 +84,40 @@ info:
   title: Dockify Backend API
   version: "1.0"
 paths:
+  /api/v1/location/nearest:
+    post:
+      consumes:
+      - application/json
+      description: Retrieves users nearest to given coordinates within a radius.
+      parameters:
+      - description: Nearest users request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.NearestUsersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.NearestUsersResponse'
+            type: array
+        "204":
+          description: no content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+      summary: Get nearest users
+      tags:
+      - location
   /api/v1/login:
     post:
       consumes:
@@ -64,21 +141,15 @@ paths:
         "400":
           description: invalid request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/entity.ErrorMessage'
         "401":
           description: invalid email or password
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/entity.ErrorMessage'
         "500":
           description: internal server error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/entity.ErrorMessage'
       summary: User login
       tags:
       - User
@@ -105,15 +176,11 @@ paths:
         "400":
           description: invalid user_id or missing parameter
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/entity.ErrorMessage'
         "500":
           description: failed to get health metrics
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/entity.ErrorMessage'
       summary: Get health metrics
       tags:
       - Metrics
@@ -140,18 +207,27 @@ paths:
         "400":
           description: invalid request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/entity.ErrorMessage'
         "500":
           description: failed to create health metrics
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/entity.ErrorMessage'
       summary: Create health metrics
       tags:
       - Metrics
+  /api/v1/recommendation:
+    get:
+      description: Returns a recommendation string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: recommendation
+          schema:
+            type: string
+      summary: Get Recommendation
+      tags:
+      - Recommendation
   /api/v1/register:
     post:
       consumes:
@@ -170,20 +246,15 @@ paths:
         "201":
           description: created user id
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/entity.CreatedUserResponse'
         "400":
           description: invalid request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/entity.ErrorMessage'
         "500":
           description: failed to register user
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/entity.ErrorMessage'
       summary: Register a new user
       tags:
       - User
