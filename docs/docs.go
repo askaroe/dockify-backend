@@ -270,9 +270,9 @@ const docTemplate = `{
                 "summary": "Get Recommendation",
                 "responses": {
                     "200": {
-                        "description": "recommendation",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/entity.RecommendationResponse"
                         }
                     }
                 }
@@ -450,6 +450,14 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "entity.RecommendationResponse": {
+            "type": "object",
+            "properties": {
+                "recommendation": {
+                    "type": "string"
                 }
             }
         },

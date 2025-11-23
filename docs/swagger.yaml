@@ -71,6 +71,11 @@ definitions:
       user_id:
         type: integer
     type: object
+  entity.RecommendationResponse:
+    properties:
+      recommendation:
+        type: string
+    type: object
   entity.UserLoginRequest:
     properties:
       email:
@@ -263,9 +268,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: recommendation
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/entity.RecommendationResponse'
       summary: Get Recommendation
       tags:
       - Recommendation
