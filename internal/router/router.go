@@ -33,6 +33,11 @@ func NewRouter(handler *handlers.Handler) *gin.Engine {
 		{
 			location.POST("/nearest", handler.Location.GetNearestUsers)
 		}
+
+		hospitals := api.Group("/hospitals")
+		{
+			hospitals.POST("/nearest", handlers.GetNearestHospitals)
+		}
 	}
 
 	r.GET("/health", handlers.HealthCheck)

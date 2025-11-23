@@ -16,6 +16,49 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/hospitals/nearest": {
+            "post": {
+                "description": "Returns a list of nearest hospitals to the provided location",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hospitals"
+                ],
+                "summary": "Get Nearest Hospitals",
+                "parameters": [
+                    {
+                        "description": "Nearest hospitals request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.NearestHospitalsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.Location"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/location/nearest": {
             "post": {
                 "description": "Retrieves users nearest to given coordinates within a radius.",
@@ -357,6 +400,24 @@ const docTemplate = `{
                 "longitude": {
                     "type": "number",
                     "example": 37.617396
+                }
+            }
+        },
+        "entity.NearestHospitalsRequest": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "example": 55.755825
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 37.617396
+                },
+                "radius": {
+                    "description": "in meters",
+                    "type": "integer",
+                    "example": 5000
                 }
             }
         },

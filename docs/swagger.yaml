@@ -36,6 +36,19 @@ definitions:
         example: 37.617396
         type: number
     type: object
+  entity.NearestHospitalsRequest:
+    properties:
+      latitude:
+        example: 55.755825
+        type: number
+      longitude:
+        example: 37.617396
+        type: number
+      radius:
+        description: in meters
+        example: 5000
+        type: integer
+    type: object
   entity.NearestUsersRequest:
     properties:
       latitude:
@@ -84,6 +97,34 @@ info:
   title: Dockify Backend API
   version: "1.0"
 paths:
+  /api/v1/hospitals/nearest:
+    post:
+      consumes:
+      - application/json
+      description: Returns a list of nearest hospitals to the provided location
+      parameters:
+      - description: Nearest hospitals request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.NearestHospitalsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Location'
+            type: array
+        "400":
+          description: invalid request
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+      summary: Get Nearest Hospitals
+      tags:
+      - Hospitals
   /api/v1/location/nearest:
     post:
       consumes:

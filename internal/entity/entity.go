@@ -50,6 +50,12 @@ type NearestUsersRequest struct {
 	Radius    int     `json:"radius" example:"5000"` // in meters
 }
 
+type NearestHospitalsRequest struct {
+	Longitude float64 `json:"longitude" example:"37.617396"`
+	Latitude  float64 `json:"latitude" example:"55.755825"`
+	Radius    int     `json:"radius" example:"5000"` // in meters
+}
+
 type NearestUsersResponse struct {
 	UserID   int      `json:"user_id"`
 	Location Location `json:"location"`
