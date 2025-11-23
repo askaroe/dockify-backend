@@ -43,10 +43,10 @@ func HealthCheck(c *gin.Context) {
 // @Description Returns a recommendation string
 // @Tags Recommendation
 // @Produce json
-// @Success 200 {string} string "recommendation"
+// @Success 200 {object} entity.RecommendationResponse
 // @Router /api/v1/recommendation [get]
 func GetRecommendation(c *gin.Context) {
-	c.JSON(http.StatusOK, "recommendation")
+	c.JSON(http.StatusOK, entity.RecommendationResponse{Recommendation: "Stay hydrated and take regular breaks during work!"})
 }
 
 // GetNearestHospitals godoc

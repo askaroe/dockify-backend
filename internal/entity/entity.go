@@ -60,3 +60,7 @@ type NearestUsersResponse struct {
 	UserID   int      `json:"user_id"`
 	Location Location `json:"location"`
 }
+
+type RecommendationResponse struct {
+	Recommendation string `json:"recommendation"`
+}
