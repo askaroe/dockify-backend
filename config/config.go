@@ -10,6 +10,7 @@ type Config struct {
 	Host string `json:"host" envconfig:"host"`
 	Port string `json:"port" envconfig:"port"`
 	PostgresConfig
+	MindsporeModelURL string `json:"mindspore_model_url" envconfig:"mindspore_model_url"`
 }
 
 type PostgresConfig struct {
