@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/askaroe/dockify-backend/config"
 	_ "github.com/askaroe/dockify-backend/docs"
+	"github.com/askaroe/dockify-backend/internal/gateway"
 	"github.com/askaroe/dockify-backend/internal/handlers"
 	"github.com/askaroe/dockify-backend/internal/repository"
 	"github.com/askaroe/dockify-backend/internal/router"
@@ -32,7 +33,8 @@ func main() {
 
 	repo := repository.NewRepository(db)
 
-	s := services.NewService(repo)
+	gw := gateway.NewGateway(cfg)
+	s := services.NewService(repo, gw)
 
 	handler := handlers.NewHandler(logger, s)
 

@@ -10,7 +10,7 @@ import (
 )
 
 type Health interface {
-	GetMetricsByUserId(ctx context.Context, id int) (models.HealthMetrics, error)
+	GetMetricsByUserId(ctx context.Context, id int) ([]models.HealthMetrics, error)
 	CreateHealthMetric(ctx context.Context, req entity.HealthMetricsRequest) error
 }
 
@@ -22,7 +22,7 @@ func NewHealthService(repo *repository.Repository) Health {
 	return &health{repo: repo}
 }
 
-func (h *health) GetMetricsByUserId(ctx context.Context, id int) (models.HealthMetrics, error) {
+func (h *health) GetMetricsByUserId(ctx context.Context, id int) ([]models.HealthMetrics, error) {
 	return h.repo.Health.GetMetricsByUserId(ctx, id)
 }
 

@@ -8,7 +8,7 @@ import (
 )
 
 type Health interface {
-	GetMetricsByUserId(ctx context.Context, id int) (models.HealthMetrics, error)
+	GetMetricsByUserId(ctx context.Context, id int) ([]models.HealthMetrics, error)
 	CreateHealthMetric(ctx context.Context, req models.HealthMetrics) (int, error)
 	CreateHealthMetrics(ctx context.Context, req []models.HealthMetrics) error
 }
@@ -21,12 +21,25 @@ func NewHealthRepository(db *psql.Client) Health {
 	return &health{db: db}
 }
 
-func (h *health) GetMetricsByUserId(ctx context.Context, id int) (models.HealthMetrics, error) {
+func (h *health) GetMetricsByUserId(ctx context.Context, id int) ([]models.HealthMetrics, error) {
 	query := `SELECT id, user_id, metric_type, metric_value, recorded_at FROM health_metrics WHERE user_id = $1`
-	var metrics models.HealthMetrics
-	err := h.db.QueryRow(ctx, query, id).Scan(&metrics.ID, &metrics.UserId, &metrics.MetricType, &metrics.MetricValue, &metrics.RecordedAt)
+	rows, err := h.db.Query(ctx, query, id)
 	if err != nil {
-		return models.HealthMetrics{}, err
+		return nil, err
+	}
+	defer rows.Close()
+
+	var metrics []models.HealthMetrics
+	for rows.Next() {
+		var metric models.HealthMetrics
+		err := rows.Scan(&metric.ID, &metric.UserId, &metric.MetricType, &metric.MetricValue, &metric.RecordedAt)
+		if err != nil {
+			return nil, err
+		}
+		metrics = append(metrics, metric)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 	return metrics, nil
 }
