@@ -82,59 +82,59 @@ func (h *Handler) GetRecommendation(c *gin.Context) {
 
 		switch m.MetricType {
 		// Lifestyle
-		case "age":
+		case "AGE":
 			lifeReq.Age = valInt
-		case "weight_kg":
+		case "WEIGHT":
 			lifeReq.WeightKg = valInt
-		case "height_m":
+		case "HEIGHT_M":
 			lifeReq.HeightM = valFloat
-		case "bmi":
+		case "BMI":
 			lifeReq.Bmi = valFloat
-		case "fat_percentage":
+		case "FAT_PERCENTAGE":
 			lifeReq.FatPercentage = valFloat
-		case "max_bpm":
+		case "MAX_BPM":
 			lifeReq.MaxBpm = valInt
-		case "avg_bpm":
+		case "AVG_BPM":
 			lifeReq.AvgBpm = valInt
 		case "resting_bpm":
 			lifeReq.RestingBpm = valInt
-		case "session_duration_hours":
+		case "SESSION_DURATION_HOURS":
 			lifeReq.SessionDurationHours = valFloat
-		case "calories_burned":
+		case "CALORIES":
 			lifeReq.CaloriesBurned = valInt
-		case "workout_frequency":
+		case "WORKOUT_FREQUENCY":
 			lifeReq.WorkoutFrequency = valInt
-		case "daily_calories":
+		case "DAILY_CALORIES":
 			lifeReq.DailyCalories = valInt
-		case "water_intake_liters":
+		case "WATER_INTAKE_LITERS":
 			lifeReq.WaterIntakeLiters = valFloat
 
 		// Sleep
-		case "sleep_duration_hours":
+		case "SLEEP_DURATION":
 			sleepReq.SleepDurationHours = valFloat
-		case "time_in_bed_hours":
+		case "TIME_IN_BED_HOURS":
 			sleepReq.TimeInBedHours = valFloat
-		case "heart_rate":
+		case "HEART_RATE":
 			sleepReq.HeartRate = valInt
-		case "sleep_efficiency":
+		case "SLEEP_EFFICIENCY":
 			sleepReq.SleepEfficiency = valFloat
-		case "movements_per_hour":
+		case "MOVEMENTS_PER_HOUR":
 			sleepReq.MovementsPerHour = valFloat
-		case "snore_time":
+		case "SNORE_TIME":
 			sleepReq.SnoreTime = valInt
-		case "day_of_week":
+		case "DAY_OF_WEEK":
 			sleepReq.DayOfWeek = valInt
-		case "hour_started":
+		case "HOUR_STARTED":
 			sleepReq.HourStarted = valInt
-		case "note_coffee":
+		case "NOTE_COFFEE":
 			sleepReq.NoteCoffee = valInt
-		case "note_tea":
+		case "NOTE_TEA":
 			sleepReq.NoteTea = valInt
-		case "note_workout":
+		case "NOTE_WORKOUT":
 			sleepReq.NoteWorkout = valInt
-		case "note_stress":
+		case "NOTE_STRESS":
 			sleepReq.NoteStress = valInt
-		case "note_ate_late":
+		case "NOTE_ATE_LATE":
 			sleepReq.NoteAteLate = valInt
 		}
 	}
