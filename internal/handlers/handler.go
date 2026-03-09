@@ -51,8 +51,10 @@ func HealthCheck(c *gin.Context) {
 // @Tags Recommendation
 // @Accept json
 // @Produce json
-// @Param user_id query int true "User ID for fetching metrics"
+// @Param user_id query integer true "User ID for fetching metrics"
 // @Success 200 {object} entity.RecommendationResponse
+// @Failure 400 {object} entity.ErrorMessage
+// @Failure 500 {object} entity.ErrorMessage
 // @Router /api/v1/recommendation [get]
 func (h *Handler) GetRecommendation(c *gin.Context) {
 	ctx := c.Request.Context()

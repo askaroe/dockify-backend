@@ -1,13 +1,11 @@
 {
   "host": "localhost",
   "port": "8080",
-
   "db_host": "localhost",
   "db_name": "dockify",
   "db_port": "5432",
   "db_username": "postgres",
-  "db_password": "Admin123",
+  "db_password": "admin",
   "db_sslmode": "disable",
-
   "mindspore_model_url": "http://localhost:8000"
 }

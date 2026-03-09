@@ -286,6 +286,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/entity.RecommendationResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorMessage"
+                        }
                     }
                 }
             }
