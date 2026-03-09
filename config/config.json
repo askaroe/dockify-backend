@@ -7,5 +7,5 @@
   "db_username": "postgres",
   "db_password": "admin",
   "db_sslmode": "disable",
-  "mindspore_model_url": "http://localhost:8000"
+  "mindspore_model_url": "http://localhost:8001"
 }
