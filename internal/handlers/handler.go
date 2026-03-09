@@ -49,8 +49,9 @@ func HealthCheck(c *gin.Context) {
 // @Summary Get Recommendation
 // @Description Returns a recommendation string based on user metrics
 // @Tags Recommendation
+// @Accept json
 // @Produce json
-// @Param user_id query int true "User ID"
+// @Param user_id query int true "User ID for fetching metrics"
 // @Success 200 {object} entity.RecommendationResponse
 // @Router /api/v1/recommendation [get]
 func (h *Handler) GetRecommendation(c *gin.Context) {
