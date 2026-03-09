@@ -263,7 +263,13 @@ paths:
       - Metrics
   /api/v1/recommendation:
     get:
-      description: Returns a recommendation string
+      description: Returns a recommendation string based on user metrics
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:

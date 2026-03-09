@@ -260,7 +260,7 @@ const docTemplate = `{
         },
         "/api/v1/recommendation": {
             "get": {
-                "description": "Returns a recommendation string",
+                "description": "Returns a recommendation string based on user metrics",
                 "produces": [
                     "application/json"
                 ],
@@ -268,6 +268,15 @@ const docTemplate = `{
                     "Recommendation"
                 ],
                 "summary": "Get Recommendation",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

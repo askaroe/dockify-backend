@@ -47,9 +47,10 @@ func HealthCheck(c *gin.Context) {
 
 // GetRecommendation godoc
 // @Summary Get Recommendation
-// @Description Returns a recommendation string
+// @Description Returns a recommendation string based on user metrics
 // @Tags Recommendation
 // @Produce json
+// @Param user_id query int true "User ID"
 // @Success 200 {object} entity.RecommendationResponse
 // @Router /api/v1/recommendation [get]
 func (h *Handler) GetRecommendation(c *gin.Context) {
