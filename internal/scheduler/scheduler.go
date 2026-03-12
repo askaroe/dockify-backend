@@ -28,18 +28,24 @@ func StartDocumentCleanup(db *psql.Client, logger *utils.Logger) {
 }
 
 func cleanup(db *psql.Client) error {
-	// Remove files from disk
+	// Remove contents inside the documents directory (not the directory itself)
 	dir := "documents"
-	if err := os.RemoveAll(dir); err != nil {
-		return fmt.Errorf("remove documents directory: %w", err)
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil // nothing to clean
+		}
+		return fmt.Errorf("read documents directory: %w", err)
 	}
-	// Recreate empty directory
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		return fmt.Errorf("recreate documents directory: %w", err)
+	for _, entry := range entries {
+		path := fmt.Sprintf("%s/%s", dir, entry.Name())
+		if err := os.RemoveAll(path); err != nil {
+			return fmt.Errorf("remove %s: %w", path, err)
+		}
 	}
 
 	// Truncate the documents table
-	_, err := db.Exec(context.Background(), "DELETE FROM documents")
+	_, err = db.Exec(context.Background(), "DELETE FROM documents")
 	if err != nil {
 		return fmt.Errorf("truncate documents table: %w", err)
 	}
