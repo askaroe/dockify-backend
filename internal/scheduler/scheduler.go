@@ -13,7 +13,7 @@ import (
 // StartDocumentCleanup runs a background goroutine that clears the documents
 // directory and truncates the documents table every 3 hours.
 func StartDocumentCleanup(db *psql.Client, logger *utils.Logger) {
-	ticker := time.NewTicker(3 * time.Minute)
+	ticker := time.NewTicker(3 * time.Hour)
 
 	go func() {
 		for range ticker.C {
