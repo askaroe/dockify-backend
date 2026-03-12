@@ -38,6 +38,13 @@ func NewRouter(handler *handlers.Handler) *gin.Engine {
 		{
 			hospitals.POST("/nearest", handlers.GetNearestHospitals)
 		}
+
+		documents := api.Group("/documents")
+		{
+			documents.POST("/upload", handler.Document.UploadDocument)
+			documents.GET("", handler.Document.ListDocuments)
+			documents.DELETE("/:id", handler.Document.DeleteDocument)
+		}
 	}
 
 	r.GET("/health", handlers.HealthCheck)

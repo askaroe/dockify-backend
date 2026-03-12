@@ -31,3 +31,13 @@ type Location struct {
 	Longitude  decimal.Decimal `json:"longitude"`
 	RecordedAt *time.Time      `json:"recorded_at"`
 }
+
+type Document struct {
+	ID          string     `json:"id"`
+	UserId      int        `json:"user_id"`
+	FileName    string     `json:"file_name"`
+	FilePath    string     `json:"file_path"`
+	FileSize    int64      `json:"file_size"`
+	ContentType string     `json:"content_type"`
+	UploadedAt  *time.Time `json:"uploaded_at"`
+}

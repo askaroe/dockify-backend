@@ -64,3 +64,16 @@ type NearestUsersResponse struct {
 type RecommendationResponse struct {
 	Recommendation string `json:"recommendation"`
 }
+
+type DocumentResponse struct {
+	ID          string `json:"id"`
+	UserID      int    `json:"user_id"`
+	FileName    string `json:"file_name"`
+	FileSize    int64  `json:"file_size"`
+	ContentType string `json:"content_type"`
+	UploadedAt  string `json:"uploaded_at"`
+}
+
+type DocumentDeleteResponse struct {
+	Message string `json:"message"`
+}

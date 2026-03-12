@@ -7,6 +7,7 @@ import (
 	"github.com/askaroe/dockify-backend/internal/handlers"
 	"github.com/askaroe/dockify-backend/internal/repository"
 	"github.com/askaroe/dockify-backend/internal/router"
+	"github.com/askaroe/dockify-backend/internal/scheduler"
 	"github.com/askaroe/dockify-backend/internal/server"
 	"github.com/askaroe/dockify-backend/internal/services"
 	"github.com/askaroe/dockify-backend/pkg/psql"
@@ -40,8 +41,12 @@ func main() {
 
 	r := router.NewRouter(handler)
 
+	// Start background scheduler: clears documents every 3 hours
+	scheduler.StartDocumentCleanup(db, logger)
+
 	srv := server.New(cfg, r, logger)
 	srv.Start()
 	srv.HandleShutdown()
 
 }
+
