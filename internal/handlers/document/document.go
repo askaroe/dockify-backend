@@ -1,6 +1,7 @@
 package document
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -13,6 +14,7 @@ import (
 type Document interface {
 	UploadDocument(c *gin.Context)
 	ListDocuments(c *gin.Context)
+	DownloadDocument(c *gin.Context)
 	DeleteDocument(c *gin.Context)
 }
 
@@ -185,4 +187,36 @@ func (d *document) DeleteDocument(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, entity.DocumentDeleteResponse{Message: "document deleted"})
+}
+
+// DownloadDocument godoc
+// @Summary Download a document
+// @Description Download a file by document UUID
+// @Tags Documents
+// @Produce octet-stream
+// @Param id path string true "Document UUID"
+// @Success 200 {file} binary "file content"
+// @Failure 400 {object} entity.ErrorMessage
+// @Failure 404 {object} entity.ErrorMessage
+// @Failure 500 {object} entity.ErrorMessage
+// @Router /api/v1/documents/{id}/download [get]
+func (d *document) DownloadDocument(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	docID := c.Param("id")
+	if docID == "" {
+		c.JSON(http.StatusBadRequest, entity.ErrorMessage{Message: "document id is required"})
+		return
+	}
+
+	doc, err := d.s.Document.GetByID(ctx, docID)
+	if err != nil {
+		d.logger.Errorf("DownloadDocument error: %v", err)
+		c.JSON(http.StatusNotFound, entity.ErrorMessage{Message: "document not found"})
+		return
+	}
+
+	c.Header("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, doc.FileName))
+	c.Header("Content-Type", doc.ContentType)
+	c.File(doc.FilePath)
 }

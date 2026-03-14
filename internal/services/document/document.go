@@ -16,6 +16,7 @@ import (
 type Document interface {
 	Upload(ctx context.Context, userID int, fileName string, contentType string, fileSize int64, fileReader io.Reader) (*models.Document, error)
 	ListByUser(ctx context.Context, userID int) ([]models.Document, error)
+	GetByID(ctx context.Context, docID string) (*models.Document, error)
 	Delete(ctx context.Context, docID string, userID int) error
 }
 
@@ -72,6 +73,10 @@ func (d *document) Upload(ctx context.Context, userID int, fileName string, cont
 
 func (d *document) ListByUser(ctx context.Context, userID int) ([]models.Document, error) {
 	return d.repo.Document.GetByUserID(ctx, userID)
+}
+
+func (d *document) GetByID(ctx context.Context, docID string) (*models.Document, error) {
+	return d.repo.Document.GetByID(ctx, docID)
 }
 
 func (d *document) Delete(ctx context.Context, docID string, userID int) error {

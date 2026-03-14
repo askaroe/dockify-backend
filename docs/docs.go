@@ -162,6 +162,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/documents/{id}/download": {
+            "get": {
+                "description": "Download a file by document UUID",
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Download a document",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Document UUID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "file content",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/hospitals/nearest": {
             "post": {
                 "description": "Returns a list of nearest hospitals to the provided location",

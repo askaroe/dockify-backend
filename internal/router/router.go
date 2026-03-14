@@ -43,6 +43,7 @@ func NewRouter(handler *handlers.Handler) *gin.Engine {
 		{
 			documents.POST("/upload", handler.Document.UploadDocument)
 			documents.GET("", handler.Document.ListDocuments)
+			documents.GET("/:id/download", handler.Document.DownloadDocument)
 			documents.DELETE("/:id", handler.Document.DeleteDocument)
 		}
 	}

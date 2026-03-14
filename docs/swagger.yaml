@@ -185,6 +185,37 @@ paths:
       summary: Delete a document
       tags:
       - Documents
+  /api/v1/documents/{id}/download:
+    get:
+      description: Download a file by document UUID
+      parameters:
+      - description: Document UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: file content
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+      summary: Download a document
+      tags:
+      - Documents
   /api/v1/documents/upload:
     post:
       consumes:
