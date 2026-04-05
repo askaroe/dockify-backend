@@ -1,4 +1,36 @@
 definitions:
+  entity.ChatMessageResponse:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      doc_id:
+        type: string
+      id:
+        type: integer
+      role:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  entity.ChatRequest:
+    properties:
+      doc_id:
+        type: string
+      message:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - message
+    - user_id
+    type: object
+  entity.ChatResponse:
+    properties:
+      reply:
+        type: string
+    type: object
   entity.CreatedUserResponse:
     properties:
       user_id:
@@ -18,6 +50,8 @@ definitions:
       file_size:
         type: integer
       id:
+        type: string
+      summary:
         type: string
       uploaded_at:
         type: string
@@ -122,6 +156,132 @@ info:
   title: Dockify Backend API
   version: "1.0"
 paths:
+  /api/v1/chat:
+    delete:
+      description: Delete chat history for a user, optionally filtered by document
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: Document ID
+        in: query
+        name: doc_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+      summary: Clear chat history
+      tags:
+      - Chat
+    get:
+      description: Returns chat message history for a user, optionally filtered by
+        document
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: Document ID
+        in: query
+        name: doc_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.ChatMessageResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+      summary: Get chat history
+      tags:
+      - Chat
+    post:
+      consumes:
+      - application/json
+      description: Send a message and get a response from the AI assistant
+      parameters:
+      - description: Chat message
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ChatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.ChatResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+      summary: Send a chat message
+      tags:
+      - Chat
+  /api/v1/chat/stream:
+    post:
+      consumes:
+      - application/json
+      description: Send a message and receive a streaming SSE response from the AI
+        assistant
+      parameters:
+      - description: Chat message
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ChatRequest'
+      produces:
+      - text/event-stream
+      responses:
+        "200":
+          description: SSE stream
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.ErrorMessage'
+      summary: Send a chat message (streaming)
+      tags:
+      - Chat
   /api/v1/documents:
     get:
       consumes:

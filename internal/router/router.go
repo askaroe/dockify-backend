@@ -46,6 +46,14 @@ func NewRouter(handler *handlers.Handler) *gin.Engine {
 			documents.GET("/:id/download", handler.Document.DownloadDocument)
 			documents.DELETE("/:id", handler.Document.DeleteDocument)
 		}
+
+		chatGroup := api.Group("/chat")
+		{
+			chatGroup.POST("", handler.Chat.SendMessage)
+			chatGroup.POST("/stream", handler.Chat.SendMessageStream)
+			chatGroup.GET("", handler.Chat.GetHistory)
+			chatGroup.DELETE("", handler.Chat.ClearHistory)
+		}
 	}
 
 	r.GET("/health", handlers.HealthCheck)

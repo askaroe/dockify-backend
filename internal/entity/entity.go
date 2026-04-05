@@ -71,9 +71,29 @@ type DocumentResponse struct {
 	FileName    string `json:"file_name"`
 	FileSize    int64  `json:"file_size"`
 	ContentType string `json:"content_type"`
+	Summary     string `json:"summary"`
 	UploadedAt  string `json:"uploaded_at"`
 }
 
 type DocumentDeleteResponse struct {
 	Message string `json:"message"`
+}
+
+type ChatRequest struct {
+	UserID  int     `json:"user_id" binding:"required"`
+	DocID   *string `json:"doc_id"`
+	Message string  `json:"message" binding:"required"`
+}
+
+type ChatResponse struct {
+	Reply string `json:"reply"`
+}
+
+type ChatMessageResponse struct {
+	ID        int    `json:"id"`
+	UserID    int    `json:"user_id"`
+	DocID     *string `json:"doc_id"`
+	Role      string `json:"role"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"created_at"`
 }

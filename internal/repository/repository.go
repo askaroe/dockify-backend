@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/askaroe/dockify-backend/internal/repository/chat"
 	"github.com/askaroe/dockify-backend/internal/repository/document"
 	"github.com/askaroe/dockify-backend/internal/repository/health"
 	"github.com/askaroe/dockify-backend/internal/repository/location"
@@ -13,6 +14,7 @@ type Repository struct {
 	user.User
 	location.Location
 	Document document.Document
+	Chat     chat.Chat
 }
 
 func NewRepository(client *psql.Client) *Repository {
@@ -21,5 +23,6 @@ func NewRepository(client *psql.Client) *Repository {
 		User:     user.NewUserRepository(client),
 		Location: location.NewLocationRepository(client),
 		Document: document.NewDocumentRepository(client),
+		Chat:     chat.NewChatRepository(client),
 	}
 }

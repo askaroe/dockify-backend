@@ -87,6 +87,7 @@ func (d *document) UploadDocument(c *gin.Context) {
 		FileName:    doc.FileName,
 		FileSize:    doc.FileSize,
 		ContentType: doc.ContentType,
+		Summary:     doc.Summary,
 		UploadedAt:  "just now",
 	})
 }
@@ -136,6 +137,7 @@ func (d *document) ListDocuments(c *gin.Context) {
 			FileName:    doc.FileName,
 			FileSize:    doc.FileSize,
 			ContentType: doc.ContentType,
+			Summary:     doc.Summary,
 			UploadedAt:  uploadedAt,
 		})
 	}

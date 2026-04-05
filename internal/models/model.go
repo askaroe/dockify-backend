@@ -39,5 +39,15 @@ type Document struct {
 	FilePath    string     `json:"file_path"`
 	FileSize    int64      `json:"file_size"`
 	ContentType string     `json:"content_type"`
+	Summary     string     `json:"summary"`
 	UploadedAt  *time.Time `json:"uploaded_at"`
+}
+
+type ChatMessage struct {
+	ID        int        `json:"id"`
+	UserID    int        `json:"user_id"`
+	DocID     *string    `json:"doc_id"`
+	Role      string     `json:"role"`
+	Content   string     `json:"content"`
+	CreatedAt *time.Time `json:"created_at"`
 }

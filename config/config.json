@@ -7,5 +7,7 @@
   "db_username": "postgres",
   "db_password": "Admin1234",
   "db_sslmode": "disable",
-  "mindspore_model_url": "http://localhost:8001"
+  "mindspore_model_url": "http://localhost:8001",
+  "deepseek_base_url": "https://api.deepseek.com",
+  "deepseek_api_key": ""
 }

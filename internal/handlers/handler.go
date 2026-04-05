@@ -7,6 +7,7 @@ import (
 
 	"github.com/askaroe/dockify-backend/internal/entity"
 	"github.com/askaroe/dockify-backend/internal/gateway/mindspore"
+	"github.com/askaroe/dockify-backend/internal/handlers/chat"
 	"github.com/askaroe/dockify-backend/internal/handlers/document"
 	"github.com/askaroe/dockify-backend/internal/handlers/health"
 	"github.com/askaroe/dockify-backend/internal/handlers/location"
@@ -22,6 +23,7 @@ type Handler struct {
 	health.Health
 	location.Location
 	Document document.Document
+	Chat     chat.Chat
 	s        *services.Service
 	logger   *utils.Logger
 }
@@ -32,6 +34,7 @@ func NewHandler(logger *utils.Logger, s *services.Service) *Handler {
 		Health:   health.NewHealthHandler(s, logger),
 		Location: location.NewLocationHandler(s, logger),
 		Document: document.NewDocumentHandler(s, logger),
+		Chat:     chat.NewChatHandler(s, logger),
 		s:        s,
 		logger:   logger,
 	}

@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/askaroe/dockify-backend/internal/gateway"
 	"github.com/askaroe/dockify-backend/internal/repository"
+	"github.com/askaroe/dockify-backend/internal/services/chat"
 	"github.com/askaroe/dockify-backend/internal/services/document"
 	"github.com/askaroe/dockify-backend/internal/services/health"
 	"github.com/askaroe/dockify-backend/internal/services/location"
@@ -14,6 +15,7 @@ type Service struct {
 	user.User
 	location.Location
 	Document document.Document
+	Chat     chat.Chat
 	Gateway  *gateway.Gateway
 }
 
@@ -22,7 +24,8 @@ func NewService(repo *repository.Repository, gw *gateway.Gateway) *Service {
 		Health:   health.NewHealthService(repo),
 		User:     user.NewUserService(repo),
 		Location: location.NewLocationService(repo),
-		Document: document.NewDocumentService(repo),
+		Document: document.NewDocumentService(repo, gw),
+		Chat:     chat.NewChatService(repo, gw),
 		Gateway:  gw,
 	}
 }

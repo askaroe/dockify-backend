@@ -11,6 +11,7 @@ type Document interface {
 	Create(ctx context.Context, doc models.Document) (string, error)
 	GetByUserID(ctx context.Context, userID int) ([]models.Document, error)
 	GetByID(ctx context.Context, id string) (*models.Document, error)
+	UpdateSummary(ctx context.Context, id string, summary string) error
 	Delete(ctx context.Context, id string) error
 }
 
@@ -34,7 +35,7 @@ func (d *document) Create(ctx context.Context, doc models.Document) (string, err
 }
 
 func (d *document) GetByUserID(ctx context.Context, userID int) ([]models.Document, error) {
-	query := `SELECT id, user_id, file_name, file_path, file_size, content_type, uploaded_at
+	query := `SELECT id, user_id, file_name, file_path, file_size, content_type, summary, uploaded_at
 	           FROM documents WHERE user_id = $1 ORDER BY uploaded_at DESC`
 	rows, err := d.db.Query(ctx, query, userID)
 	if err != nil {
@@ -45,7 +46,7 @@ func (d *document) GetByUserID(ctx context.Context, userID int) ([]models.Docume
 	var docs []models.Document
 	for rows.Next() {
 		var doc models.Document
-		err := rows.Scan(&doc.ID, &doc.UserId, &doc.FileName, &doc.FilePath, &doc.FileSize, &doc.ContentType, &doc.UploadedAt)
+		err := rows.Scan(&doc.ID, &doc.UserId, &doc.FileName, &doc.FilePath, &doc.FileSize, &doc.ContentType, &doc.Summary, &doc.UploadedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -55,14 +56,20 @@ func (d *document) GetByUserID(ctx context.Context, userID int) ([]models.Docume
 }
 
 func (d *document) GetByID(ctx context.Context, id string) (*models.Document, error) {
-	query := `SELECT id, user_id, file_name, file_path, file_size, content_type, uploaded_at
+	query := `SELECT id, user_id, file_name, file_path, file_size, content_type, summary, uploaded_at
 	           FROM documents WHERE id = $1`
 	var doc models.Document
-	err := d.db.QueryRow(ctx, query, id).Scan(&doc.ID, &doc.UserId, &doc.FileName, &doc.FilePath, &doc.FileSize, &doc.ContentType, &doc.UploadedAt)
+	err := d.db.QueryRow(ctx, query, id).Scan(&doc.ID, &doc.UserId, &doc.FileName, &doc.FilePath, &doc.FileSize, &doc.ContentType, &doc.Summary, &doc.UploadedAt)
 	if err != nil {
 		return nil, err
 	}
 	return &doc, nil
+}
+
+func (d *document) UpdateSummary(ctx context.Context, id string, summary string) error {
+	query := `UPDATE documents SET summary = $1 WHERE id = $2`
+	_, err := d.db.Exec(ctx, query, summary, id)
+	return err
 }
 
 func (d *document) Delete(ctx context.Context, id string) error {

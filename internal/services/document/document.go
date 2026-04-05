@@ -9,8 +9,10 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/askaroe/dockify-backend/internal/gateway"
 	"github.com/askaroe/dockify-backend/internal/models"
 	"github.com/askaroe/dockify-backend/internal/repository"
+	"github.com/askaroe/dockify-backend/pkg/extractor"
 )
 
 type Document interface {
@@ -22,11 +24,12 @@ type Document interface {
 
 type document struct {
 	repo    *repository.Repository
+	gw      *gateway.Gateway
 	baseDir string
 }
 
-func NewDocumentService(repo *repository.Repository) Document {
-	return &document{repo: repo, baseDir: "documents"}
+func NewDocumentService(repo *repository.Repository, gw *gateway.Gateway) Document {
+	return &document{repo: repo, gw: gw, baseDir: "documents"}
 }
 
 func (d *document) Upload(ctx context.Context, userID int, fileName string, contentType string, fileSize int64, fileReader io.Reader) (*models.Document, error) {
@@ -68,6 +71,21 @@ func (d *document) Upload(ctx context.Context, userID int, fileName string, cont
 	}
 
 	doc.ID = id
+
+	// Extract text from file and send to DeepSeek for analysis (non-fatal)
+	text, extractErr := extractor.ExtractText(filePath, contentType)
+	if extractErr == nil && len(text) > 0 {
+		// Truncate to avoid exceeding token limits
+		if len(text) > 8000 {
+			text = text[:8000]
+		}
+		summary, analyzeErr := d.gw.DeepSeek.AnalyzeDocument(ctx, text)
+		if analyzeErr == nil {
+			_ = d.repo.Document.UpdateSummary(ctx, doc.ID, summary)
+			doc.Summary = summary
+		}
+	}
+
 	return &doc, nil
 }
 

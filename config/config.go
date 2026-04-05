@@ -11,6 +11,8 @@ type Config struct {
 	Port string `json:"port" envconfig:"port"`
 	PostgresConfig
 	MindsporeModelURL string `json:"mindspore_model_url" envconfig:"mindspore_model_url"`
+	DeepseekBaseURL   string `json:"deepseek_base_url" envconfig:"deepseek_base_url"`
+	DeepseekAPIKey    string `json:"deepseek_api_key" envconfig:"deepseek_api_key"`
 }
 
 type PostgresConfig struct {
